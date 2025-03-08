@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MobilePhone {
     private String myNumber;
-    private List<Contact> myContacts = new ArrayList<>();
+    private List<Contact> myContacts;
 
     public MobilePhone(String myNumber, List<Contact> contacts) {
         this.myNumber = myNumber;
@@ -21,47 +21,39 @@ public class MobilePhone {
     }
 
     public boolean addNewContact(Contact contact){
-        for(Contact c:myContacts){
-            if(c.getName().equals(contact.getName())){
-                return false;
-            }
+        if( contact==null || contact.getName()==null || contact.getPhoneNumber()==null){
+            return false;
+        }
+        if(findContact(contact)>0){
+            return false;
         }
         myContacts.add(contact);
         return true;
     }
 
     public boolean updateContact(Contact oldContact, Contact newContact){
-        for(Contact c:myContacts){
-            if(c.getName().equals(oldContact.getName())){
-                c.setPhoneNumber(newContact.getPhoneNumber());
-                return true;
-            }
+        if(findContact(oldContact)>0){
+            myContacts.set(findContact(oldContact),newContact);
+            return true;
         }
         return false;
     }
 
     public boolean removeContact(Contact contact){
-        for(Contact c:myContacts){
-            if(c.getName().equals(contact.getName())){
-                myContacts.remove(contact);
-                return true;
-            }
+        if(contact!=null && findContact(contact)>0){
+            myContacts.remove(contact);
+            return true;
         }
         return false;
     }
 
     public int findContact(Contact contact){
-        for(Contact c:myContacts){
-            if(c.getName().equals(contact.getName())){
-                return myContacts.indexOf(c);
-            }
-        }
-        return -1;
+        return this.myContacts.indexOf(contact);
     }
 
     public int findContact(String contact){
         for(Contact c:myContacts){
-            if(c.getName().equals(contact)){
+            if(c.getName().equalsIgnoreCase(contact)){
                 return myContacts.indexOf(c);
             }
         }
@@ -69,14 +61,13 @@ public class MobilePhone {
     }
 
     public Contact queryContact(String contactName){
-        for(Contact c:myContacts){
-            if(c.getName().equals(contactName)){
-                return c;
-            }
+        if(findContact(contactName)>0){
+            return myContacts.get(findContact(contactName));
+
         }
         return null;
     }
-    public void printContact(){
+    public void printContacts(){
         for(Contact c:myContacts){
             System.out.println(c.getName()+"->"+c.getPhoneNumber());
         }

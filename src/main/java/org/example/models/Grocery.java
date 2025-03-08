@@ -7,27 +7,33 @@ import java.util.Scanner;
 public class Grocery {
     public static ArrayList<String> groceryList = new ArrayList<>();
 
-    public static void startGrocery(){
-        Scanner scanner = new Scanner(System.in);
-        String userInput = scanner.nextLine();
-        switch (userInput) {
-            case "0" -> scanner.close();
-            case "1" -> {
-                System.out.println("Eklenmesini istediğiniz elemanları giriniz.");
-                addItems(scanner.nextLine());
-            }
-            case "2" -> {
-                System.out.println("Cıkarılmasını istediğiniz elemanları giriniz.");
-                removeItems(scanner.nextLine());
+    public void startGrocery(){
+        while(true){
+            Scanner scanner = new Scanner(System.in);
+            String userInput = scanner.nextLine();
+            switch (userInput) {
+                case "0" -> {
+                    scanner.close();
+                    break;
+                }
+                case "1" -> {
+                    System.out.println("Eklenmesini istediğiniz elemanları giriniz.");
+                    addItems(scanner.nextLine());
+                }
+                case "2" -> {
+                    System.out.println("Cıkarılmasını istediğiniz elemanları giriniz.");
+                    removeItems(scanner.nextLine());
+                }
             }
         }
+
     }
 
     public static void addItems(String input){
         String[] items=input.split("\\s*,\\s*");
         for(String item:items){
             if(!checkItemIsInList(item)){
-                groceryList.add(input);
+                groceryList.add(item);
             }
         }
         printSorted();
@@ -36,7 +42,7 @@ public class Grocery {
         String[] items=input.split("\\s*,\\s*");
         for(String item:items){
             if(checkItemIsInList(item)){
-                groceryList.removeIf(existingItem -> existingItem.equalsIgnoreCase(item));            }
+                groceryList.remove(item);           }
         }
         printSorted();
     }
@@ -52,9 +58,4 @@ public class Grocery {
         Collections.sort(groceryList);
         System.out.println(groceryList);
     }
-
-    public static void main(String[] args){
-        startGrocery();
-    }
-
 }
